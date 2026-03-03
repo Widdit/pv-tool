@@ -188,3 +188,150 @@ input[type='range'] {
   font-size: 0.72rem;
   color: rgba(255, 255, 255, 0.5);
 }
+
+/* Recording */
+.rec-group {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 8px !important;
+}
+
+.rec-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+}
+
+.rec-icon {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ff3333;
+  display: inline-block;
+  transition: all 0.2s;
+}
+
+.rec-btn.recording .rec-icon {
+  border-radius: 2px;
+  background: #ffffff;
+}
+
+.rec-btn.recording {
+  border-color: #ff3333;
+  background: rgba(255, 50, 50, 0.25);
+}
+
+.rec-timer {
+  font-size: 0.72rem;
+  font-family: 'Courier New', monospace;
+  color: rgba(255, 255, 255, 0.6);
+  min-width: 40px;
+}
+
+/* Mobile toggle button — hidden on desktop */
+.mobile-toggle {
+  display: none;
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 768px) {
+  #pv-container {
+    touch-action: none;
+  }
+
+  .mobile-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 200;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .controls,
+  .controls-right {
+    position: fixed;
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 12px 12px 0 0;
+    min-width: unset;
+    width: 100%;
+    max-height: 45vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px 16px;
+    gap: 10px;
+    transition: transform 0.25s ease;
+  }
+
+  .controls-right {
+    bottom: 0;
+  }
+
+  /* When hidden, slide panels off-screen */
+  .controls.controls-hidden,
+  .controls-right.controls-hidden {
+    transform: translateY(100%);
+    pointer-events: none;
+  }
+
+  .controls-bottom {
+    min-width: unset;
+    width: 100%;
+    left: 0;
+    transform: none;
+    border-radius: 12px 12px 0 0;
+    max-height: 40vh;
+  }
+
+  .controls-bottom.controls-hidden {
+    transform: translateY(100%);
+    pointer-events: none;
+  }
+
+  /* Larger touch targets */
+  .btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    min-height: 36px;
+  }
+
+  input[type='range'] {
+    height: 32px;
+  }
+
+  .effect-toggle {
+    padding: 6px 0;
+    font-size: 0.78rem;
+  }
+
+  .effect-toggle input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+  }
+
+  .effect-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 4px 10px;
+  }
+
+  select,
+  input[type='text'] {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+}

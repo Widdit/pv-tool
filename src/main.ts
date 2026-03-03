@@ -107,6 +107,14 @@ app.innerHTML = `
       <label>色相偏移 Hue <span id="hue-val">0°</span></label>
       <input type="range" id="hue-slider" min="-180" max="180" step="5" value="0">
     </div>
+
+    <div class="control-group rec-group">
+      <button id="rec-btn" class="btn rec-btn" title="录制 Record">
+        <span class="rec-icon"></span>
+        <span id="rec-label">录制 REC</span>
+      </button>
+      <span id="rec-timer" class="rec-timer"></span>
+    </div>
   </div>
 
   <div class="controls controls-bottom" id="custom-panel" style="display:none">
@@ -121,6 +129,7 @@ app.innerHTML = `
     </div>
   </div>
 
+  <button class="mobile-toggle" id="mobile-toggle" title="显示/隐藏控制面板">☰</button>
   <div id="pv-container"></div>
 `;
 
@@ -131,6 +140,19 @@ engine.init(container).then(() => {
   engine.setText('春を告げる/夜を越えて/踊れ踊れ');
   engine.loadTemplate(templates[0]);
   templateSelect.value = '0';
+});
+
+// Mobile toggle
+const mobileToggle = document.getElementById('mobile-toggle')!;
+const allPanels = app.querySelectorAll<HTMLElement>('.controls');
+const isMobile = window.matchMedia('(max-width: 768px)').matches;
+if (isMobile) {
+  allPanels.forEach(p => p.classList.add('controls-hidden'));
+}
+mobileToggle.addEventListener('click', () => {
+  const hidden = allPanels[0]?.classList.contains('controls-hidden');
+  allPanels.forEach(p => p.classList.toggle('controls-hidden', !hidden));
+  mobileToggle.textContent = hidden ? '✕' : '☰';
 });
 
 // Template
@@ -340,4 +362,94 @@ mediaApplyBtn.addEventListener('click', async () => {
     await engine.addMedia(pendingFile, mode);
     pendingFile = null;
   }
+});
+
+// --- Recording ---
+const recBtn = document.getElementById('rec-btn')!;
+const recLabel = document.getElementById('rec-label')!;
+const recTimer = document.getElementById('rec-timer')!;
+
+const templateSlugs = [
+  'blueBold', 'kineticSplit', 'bluePlane', 'rainCity', 'yorushika', 'popArt',
+  'blueInk', 'cyber', 'battle', 'geometric', 'holoScope', 'cyberpunkHud',
+  'emotionCinema', 'silhouetteClean', 'hystericNight', 'ruler', 'cyberGrunge',
+  'digitalImpression',
+];
+
+function getTemplateSlug(): string {
+  const val = templateSelect.value;
+  if (val === 'custom') return 'custom';
+  const idx = parseInt(val);
+  return templateSlugs[idx] ?? 'unknown';
+}
+
+let mediaRecorder: MediaRecorder | null = null;
+let recordedChunks: Blob[] = [];
+let recStartTime = 0;
+let recTimerInterval: ReturnType<typeof setInterval> | null = null;
+
+function formatTime(ms: number): string {
+  const s = Math.floor(ms / 1000);
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+}
+
+recBtn.addEventListener('click', () => {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    mediaRecorder.stop();
+    return;
+  }
+
+  const canvas = engine.canvas;
+  const stream = canvas.captureStream(60);
+
+  // Include audio if playing
+  if (engine.beat.audioContext && engine.beat.sourceNode) {
+    const dest = engine.beat.audioContext.createMediaStreamDestination();
+    engine.beat.sourceNode.connect(dest);
+    for (const track of dest.stream.getAudioTracks()) {
+      stream.addTrack(track);
+    }
+  }
+
+  const mp4Supported = MediaRecorder.isTypeSupported('video/mp4;codecs=avc1');
+  const mimeType = mp4Supported
+    ? 'video/mp4;codecs=avc1'
+    : MediaRecorder.isTypeSupported('video/webm;codecs=vp9')
+      ? 'video/webm;codecs=vp9'
+      : 'video/webm';
+  const ext = mp4Supported ? 'mp4' : 'webm';
+  const slug = getTemplateSlug();
+
+  recordedChunks = [];
+  mediaRecorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 8_000_000 });
+
+  mediaRecorder.ondataavailable = (e) => {
+    if (e.data.size > 0) recordedChunks.push(e.data);
+  };
+
+  mediaRecorder.onstop = () => {
+    if (recTimerInterval) { clearInterval(recTimerInterval); recTimerInterval = null; }
+    recBtn.classList.remove('recording');
+    recLabel.textContent = '录制 REC';
+    recTimer.textContent = '';
+
+    if (recordedChunks.length === 0) return;
+    const blob = new Blob(recordedChunks, { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `pv-${slug}-${Date.now()}.${ext}`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  mediaRecorder.start(100);
+  recStartTime = performance.now();
+  recBtn.classList.add('recording');
+  recLabel.textContent = '停止 STOP';
+  recTimerInterval = setInterval(() => {
+    recTimer.textContent = formatTime(performance.now() - recStartTime);
+  }, 500);
 });

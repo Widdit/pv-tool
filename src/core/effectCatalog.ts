@@ -86,6 +86,13 @@ export const effectCatalog: EffectPreset[] = [
   { type: 'organicBlob', label: '海浪 Wave', layer: 'decoration', config: { shape: 'wave', color: '$primary', alpha: 0.3, layers: 4, amplitude: 40, waveY: 0.6 } },
   { type: 'organicBlob', label: '云团 Cloud', layer: 'decoration', config: { shape: 'cloud', color: '$secondary', alpha: 0.2, count: 3 } },
 
+  // --- 笔触/涂抹 Brush ---
+  { type: 'smearBrush', label: '涂抹笔触 Smear', layer: 'decoration', config: { count: 8, grainAlpha: 0.04 } },
+
+  // --- 数字废墟 Digital Grunge ---
+  { type: 'noiseText', label: '乱码文字 NoiseText', layer: 'decoration', config: { count: 10, color: '#ffffff', bgColor: '#000000' } },
+  { type: 'dataMonitors', label: '数据终端 Monitors', layer: 'decoration', config: { count: 4, borderColor: '#ffffff', fillColor: '#000000', dataColor: '#ffffff', alpha: 0.7 } },
+
   // --- 动态检测 Motion Detection ---
   { type: 'motionBrackets', label: '运动框 Motion', layer: 'overlay', config: { color: '#00ffcc', alpha: 0.8, style: 'high' } },
 ];

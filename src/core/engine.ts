@@ -54,6 +54,7 @@ export class PVEngine {
 
   private invertFilter: PIXI.ColorMatrixFilter | null = null;
   private _invertMediaEnabled = false;
+  private _thresholdMediaEnabled = false;
 
   readonly beat = new BeatProvider();
   private _beatReactivity = 0.5;
@@ -120,6 +121,7 @@ export class PVEngine {
     this._outlineEnabled = template.features?.mediaOutline ?? false;
     this._motionDetectionEnabled = template.features?.motionDetection ?? false;
     this._invertMediaEnabled = template.features?.invertMedia ?? false;
+    this._thresholdMediaEnabled = template.features?.thresholdMedia ?? false;
     this.syncMotionDetector();
     this.syncInvertFilter();
 
@@ -334,17 +336,26 @@ export class PVEngine {
 
   private syncInvertFilter(): void {
     const mediaLayer = this.layers.get('media')!;
-    if (this._invertMediaEnabled) {
+    if (this._thresholdMediaEnabled) {
+      // High-contrast B&W: desaturate → extreme contrast (threshold-like)
+      const desat = new PIXI.ColorMatrixFilter();
+      desat.desaturate();
+      const contrast = new PIXI.ColorMatrixFilter();
+      contrast.matrix = [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0];
+      contrast.contrast(1.8, false);
+      const bright = new PIXI.ColorMatrixFilter();
+      bright.matrix = [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0];
+      bright.brightness(1.15, false);
+      mediaLayer.filters = [desat, contrast, bright];
+      this.invertFilter = null;
+    } else if (this._invertMediaEnabled) {
       if (!this.invertFilter) {
         this.invertFilter = new PIXI.ColorMatrixFilter();
       }
-      // Desaturate fully, then negate, then apply warm tint
-      // This replicates: grayscale → bitwise_not → warm tint blend
       const m = this.invertFilter;
       m.matrix = [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0];
       m.desaturate();
       m.negative(false);
-      // Warm tint: slightly boost red, reduce blue
       const tint = new PIXI.ColorMatrixFilter();
       tint.matrix = [
         1.06, 0, 0, 0, 0.08,
@@ -362,20 +373,32 @@ export class PVEngine {
   /**
    * Scale renderer resolution down when many effects are active.
    * Keeps visuals sharp with few effects, avoids GPU overload with many.
+   * Mobile devices get more aggressive downscaling.
    */
   private syncResolution(): void {
     const n = this.activeEffects.length;
     const dpr = this._nativeDPR;
+    const mobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
     let target: number;
-    if (n <= 6) {
-      target = dpr;
-    } else if (n <= 12) {
-      target = Math.min(dpr, 2);
-    } else if (n <= 18) {
-      target = Math.min(dpr, 1.5);
+    if (mobile) {
+      if (n <= 4) {
+        target = Math.min(dpr, 2);
+      } else if (n <= 8) {
+        target = Math.min(dpr, 1.5);
+      } else {
+        target = 1;
+      }
     } else {
-      target = 1;
+      if (n <= 6) {
+        target = dpr;
+      } else if (n <= 12) {
+        target = Math.min(dpr, 2);
+      } else if (n <= 18) {
+        target = Math.min(dpr, 1.5);
+      } else {
+        target = 1;
+      }
     }
 
     // Round to avoid sub-pixel jitter

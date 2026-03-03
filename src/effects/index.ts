@@ -57,6 +57,9 @@ import { Checkerboard } from './checkerboard';
 import { PerspectiveGrid } from './perspectiveGrid';
 import { CompositionGuides } from './compositionGuides';
 import { OrganicBlob } from './organicBlob';
+import { NoiseText } from './noiseText';
+import { DataMonitors } from './dataMonitors';
+import { SmearBrush } from './smearBrush';
 
 type EffectConstructor = new () => BaseEffect;
 
@@ -118,6 +121,9 @@ register('checkerboard', Checkerboard);
 register('perspectiveGrid', PerspectiveGrid);
 register('compositionGuides', CompositionGuides);
 register('organicBlob', OrganicBlob);
+register('noiseText', NoiseText);
+register('dataMonitors', DataMonitors);
+register('smearBrush', SmearBrush);
 
 export function createEffect(
   type: string,

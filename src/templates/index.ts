@@ -18,6 +18,8 @@ import { emotionCinemaTemplate } from './emotionCinema';
 import { silhouetteCleanTemplate } from './silhouetteClean';
 import { hystericNightTemplate } from './hystericNight';
 import { rulerTemplate } from './ruler';
+import { cyberGrungeTemplate } from './cyberGrunge';
+import { digitalImpressionTemplate } from './digitalImpression';
 
 export const templates: TemplateConfig[] = [
   blueBoldTemplate,        // 蓝色冲击
@@ -36,6 +38,8 @@ export const templates: TemplateConfig[] = [
   silhouetteCleanTemplate, // 剪影极简
   hystericNightTemplate,   // 歇斯底里之夜
   rulerTemplate,           // 戒尺
+  cyberGrungeTemplate,     // 赛博废墟
+  digitalImpressionTemplate, // 数字印象
 ];
 
 export function getTemplate(name: string): TemplateConfig | undefined {

@@ -27,6 +27,7 @@ export interface TemplateConfig {
     autoExtractColors?: boolean;
     motionDetection?: boolean;
     invertMedia?: boolean;
+    thresholdMedia?: boolean;
   };
 }
 

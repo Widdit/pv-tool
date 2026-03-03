@@ -119,6 +119,9 @@ export class BeatProvider {
     this.audioEl?.play();
   }
 
+  get audioContext(): AudioContext | null { return this.audioCtx; }
+  get sourceNode(): MediaElementAudioSourceNode | null { return this.source; }
+
   get paused(): boolean {
     return this.audioEl?.paused ?? true;
   }
