@@ -14,6 +14,7 @@ import { cyberGrungeTemplate } from './cyberGrunge';
 import { spiderWebTemplate } from './spiderWeb';
 import { staggeredTextTplTemplate } from './staggeredTextTpl';
 import { calmVillainTemplate } from './calmVillain';
+import { girlyCloudTemplate } from './girlyClouds';
 
 export const templates: TemplateConfig[] = [
   blueBoldTemplate,          // 0  蓝色冲击
@@ -28,6 +29,7 @@ export const templates: TemplateConfig[] = [
   spiderWebTemplate,         // 9  蛛网
   staggeredTextTplTemplate,  // 10 错落文字
   calmVillainTemplate,       // 11 冷静的反派
+  girlyCloudTemplate,        // 12 少女云朵
 ];
 
 export function getTemplate(name: string): TemplateConfig | undefined {

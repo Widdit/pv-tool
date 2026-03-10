@@ -62,6 +62,8 @@ import { DataMonitors } from './dataMonitors';
 import { SmearBrush } from './smearBrush';
 import { WebLines } from './webLines';
 import { StaggeredText } from './staggeredText';
+import { EdgeClouds } from './edgeClouds';
+import { PinkStripes } from './pinkStripes';
 
 type EffectConstructor = new () => BaseEffect;
 
@@ -128,6 +130,8 @@ register('dataMonitors', DataMonitors);
 register('smearBrush', SmearBrush);
 register('webLines', WebLines);
 register('staggeredText', StaggeredText);
+register('edgeClouds', EdgeClouds);
+register('pinkStripes', PinkStripes);
 
 export function createEffect(
   type: string,

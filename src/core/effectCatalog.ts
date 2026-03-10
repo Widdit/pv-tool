@@ -101,4 +101,8 @@ export const effectCatalog: EffectPreset[] = [
 
   // --- 动态检测 Motion Detection ---
   { type: 'motionBrackets', label: '运动框 Motion', layer: 'overlay', config: { color: '#00ffcc', alpha: 0.8, style: 'high' } },
+
+  // --- 云朵/条纹 Clouds & Stripes ---
+  { type: 'edgeClouds', label: '边缘云朵 EdgeClouds', layer: 'decoration', config: { color: '#ffffff', alpha: 1.0, cloudCount: 5, baseRadius: 100, seed: 42 } },
+  { type: 'pinkStripes', label: '粉色条纹 PinkStripes', layer: 'background', config: { pinkColor: '#fbbdbe', stripeWidth: 150, speed: 0.3, angle: -45 } },
 ];
