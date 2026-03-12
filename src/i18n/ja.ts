@@ -1,6 +1,9 @@
 import type { LocaleKey } from './zh';
 
 export const ja: Record<LocaleKey, string> = {
+  // Page
+  'page_title': 'PV Tool - PVビジュアルジェネレーター',
+
   // Panel titles
   'postfx': 'ポスト Post FX',
   'effects_library': 'エフェクト Effects',
@@ -80,8 +83,9 @@ export const ja: Record<LocaleKey, string> = {
   'tpl_spiderWeb': 'スパイダーウェブ',
   'tpl_staggeredText': 'スタッガードテキスト',
   'tpl_calmVillain': 'クールヴィラン',
-  'tpl_girlyClouds': 'ガーリークラウド',
+  'tpl_girlyClouds': 'ピンククラウド',
   'tpl_sweetPink': 'グリッドスカラップ',
+  'tpl_flyMeToTheMoon': 'Fly Me to the Moon',
 
   // File picker
   'choose_file': 'ファイル選択',
@@ -133,6 +137,7 @@ export const ja: Record<LocaleKey, string> = {
   'fx_balancingCircles': 'バランス円 Circles',
   'fx_radialRectangles': '放射矩形 RadialRect',
   'fx_starTrail': '星軌 StarTrail',
+  'fx_planet': '惑星 Planet',
   'fx_flowingLines': 'フローライン Lines',
   'fx_diagonalFill': '斜線フィル Diagonal',
   'fx_diagonalHatch': '斜線ハッチ Hatch',

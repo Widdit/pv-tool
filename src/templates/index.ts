@@ -17,6 +17,7 @@ import { staggeredTextTplTemplate } from './staggeredTextTpl';
 import { calmVillainTemplate } from './calmVillain';
 import { girlyCloudTemplate } from './girlyClouds';
 import { sweetPinkTemplate } from './sweetPink';
+import { flyMeToTheMoonTemplate } from './flyMeToTheMoon';
 
 export const templates: TemplateConfig[] = [
   blueBoldTemplate,          // 0  蓝色冲击
@@ -27,12 +28,13 @@ export const templates: TemplateConfig[] = [
   rainCityTemplate,          // 5  黑客帝国
   cyberpunkHudTemplate,      // 6  夜之城监控(建议配合视频使用)
   emotionCinemaTemplate,     // 7  情绪电影(建议配合视频使用)
-  hystericNightTemplate,     // 8  歇斯底里之夜
+  hystericNightTemplate,     // 8  歇斯底里之夜(光敏慎点)
   spiderWebTemplate,         // 9  蛛网
   staggeredTextTplTemplate,  // 10 错落文字
   calmVillainTemplate,       // 11 冷静的反派
   girlyCloudTemplate,        // 12 少女云朵
   sweetPinkTemplate,         // 13 格子花边
+  flyMeToTheMoonTemplate,    // 14 Fly Me to the Moon
 ];
 
 export function getTemplate(name: string): TemplateConfig | undefined {

@@ -1,4 +1,7 @@
 export const zh = {
+  // Page
+  'page_title': 'PV Tool - 日式PV Visual生成',
+
   // Panel titles
   'postfx': '後期 Post FX',
   'effects_library': '效果库 Effects',
@@ -80,6 +83,7 @@ export const zh = {
   'tpl_calmVillain': '冷静的反派',
   'tpl_girlyClouds': '少女云朵',
   'tpl_sweetPink': '格子花边',
+  'tpl_flyMeToTheMoon': 'Fly Me to the Moon',
 
   // File picker
   'choose_file': '选择文件',
@@ -131,6 +135,7 @@ export const zh = {
   'fx_balancingCircles': '平衡圆 Circles',
   'fx_radialRectangles': '放射矩形 RadialRect',
   'fx_starTrail': '星轨 StarTrail',
+  'fx_planet': '行星 Planet',
   'fx_flowingLines': '流动线条 Lines',
   'fx_diagonalFill': '斜线填充 Diagonal',
   'fx_diagonalHatch': '斜线网格 Hatch',

@@ -5,6 +5,7 @@ import type { TemplateConfig } from '../core/types';
 
 export const girlyCloudTemplate: TemplateConfig = {
   name: '少女云朵',
+  nameKey: 'tpl_girlyClouds',
   palette: {
     background: '#fef5f8',
     primary: '#fbbdbe',

@@ -188,7 +188,9 @@ export class PVEngine {
       if (this._bgColorOverride) {
         this.palette.background = this._bgColorOverride;
       }
-      this.app.renderer.background.color = new PIXI.Color(this.palette.background).toNumber();
+      if (!this._alphaMode) {
+        this.app.renderer.background.color = new PIXI.Color(this.palette.background).toNumber();
+      }
       this.updateBgFill();
 
       for (const entry of template.effects) {
@@ -206,6 +208,20 @@ export class PVEngine {
         } catch (err) {
           console.warn(`[PVEngine] Failed to create effect "${entry.type}":`, err);
         }
+      }
+
+      if (template.postfx) {
+        this._shake = template.postfx.shake ?? 0;
+        this._zoom = template.postfx.zoom ?? 0;
+        this._tilt = template.postfx.tilt ?? 0;
+        this.glitch = template.postfx.glitch ?? 0;
+        this.hueShift = template.postfx.hueShift ?? 0;
+      } else {
+        this._shake = 0;
+        this._zoom = 0;
+        this._tilt = 0;
+        this.glitch = 0;
+        this.hueShift = 0;
       }
 
       this.syncOutline();
@@ -338,9 +354,11 @@ export class PVEngine {
     if (val) {
       this.bgFill.visible = false;
       if (bgLayer) bgLayer.visible = false;
+      this.app.renderer.background.alpha = 0;
     } else {
       this.bgFill.visible = true;
       if (bgLayer) bgLayer.visible = true;
+      this.app.renderer.background.alpha = 1;
     }
   }
   get alphaMode() { return this._alphaMode; }

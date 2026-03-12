@@ -25,6 +25,13 @@ export interface TemplateConfig {
   bpm?: number;
   animationSpeed?: number;
   bgOpacity?: number;
+  postfx?: {
+    shake?: number;
+    zoom?: number;
+    tilt?: number;
+    glitch?: number;
+    hueShift?: number;
+  };
   features?: {
     mediaOutline?: boolean;
     autoExtractColors?: boolean;

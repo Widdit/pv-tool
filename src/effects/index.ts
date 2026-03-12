@@ -71,6 +71,7 @@ import { PulsingCircle } from './pulsingCircle';
 import { JigsawGrid } from './jigsawGrid';
 import { PaperTear } from './paperTear';
 import { StarTrail } from './starTrail';
+import { Planet } from './planet';
 
 type EffectConstructor = new () => BaseEffect;
 
@@ -146,6 +147,7 @@ register('pulsingCircle', PulsingCircle);
 register('jigsawGrid', JigsawGrid);
 register('paperTear', PaperTear);
 register('starTrail', StarTrail);
+register('planet', Planet);
 
 export function createEffect(
   type: string,

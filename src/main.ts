@@ -17,6 +17,8 @@ import {
 
 console.log('%cPV Tool%c solaris:0914', 'color:#6688cc;font-weight:bold', 'color:#888');
 
+document.title = t('page_title');
+
 const app = document.querySelector<HTMLDivElement>('#app')!;
 
 function tplName(tpl: TemplateConfig): string {
@@ -31,34 +33,19 @@ app.innerHTML = `
     <div class="controls">
       <details class="collapsible-section" open>
         <summary class="panel-title">${t('template')}</summary>
-        <div class="control-group">
-          <label class="label-with-action"><button class="btn btn-sm btn-label" id="tpl-import" title="${t('import_code')}">${t('import_code')}</button></label>
+      <div class="control-group">
           <select id="template-select">
             ${templates.map((tp, i) => `<option value="${i}">${tplName(tp)}</option>`).join('')}
             <option value="custom">${t('custom')}</option>
           </select>
           <div class="template-actions">
-            <button class="btn btn-sm" id="tpl-save" title="${t('save_tpl')}" style="display:none">${t('save_tpl')}</button>
             <button class="btn btn-sm" id="tpl-delete" title="${t('delete_tpl')}" style="display:none">${t('delete_tpl')}</button>
             <button class="btn btn-sm" id="tpl-export" title="${t('export_code')}" style="display:none">${t('export_code')}</button>
-          </div>
-          <div id="tpl-save-input" class="tpl-inline-input" style="display:none">
-            <input type="text" id="tpl-name-input" placeholder="${t('tpl_name_placeholder')}">
-            <button class="btn btn-sm" id="tpl-save-ok">${t('confirm')}</button>
-            <button class="btn btn-sm" id="tpl-save-cancel">${t('cancel')}</button>
           </div>
           <div id="tpl-delete-confirm" class="tpl-inline-input" style="display:none">
             <span class="tpl-confirm-text" id="tpl-delete-text"></span>
             <button class="btn btn-sm btn-danger" id="tpl-delete-ok">${t('delete_tpl')}</button>
             <button class="btn btn-sm" id="tpl-delete-cancel">${t('cancel')}</button>
-          </div>
-        </div>
-        <div class="control-group" id="share-code-group" style="display:none">
-          <label id="share-code-label">${t('share_code')}</label>
-          <textarea id="share-code-text" rows="3" placeholder="${t('paste_code')}"></textarea>
-          <div class="template-actions">
-            <button class="btn btn-sm" id="share-code-ok">${t('confirm')}</button>
-            <button class="btn btn-sm" id="share-code-cancel">${t('cancel')}</button>
           </div>
         </div>
       <div class="control-group">
@@ -80,20 +67,6 @@ app.innerHTML = `
       <div class="control-group">
         <label>${t('text_label')}</label>
         <textarea id="text-input" rows="1" placeholder="深夜東京/の6畳半夢">深夜東京/の6畳半夢/を見てた/灯りの灯らない蛍光灯/明日には消えてる電脳城/に/開幕戦/打ち上げて/いなくなんないよね/ここには誰もいない/ここには誰もいないから</textarea>
-      </div>
-
-      <div class="control-group">
-        <label>LRC</label>
-        <div class="file-pick">
-          <button class="btn btn-sm" id="lrc-pick-btn">导入 LRC</button>
-          <span class="file-pick-name" id="lrc-pick-name">未选择文件</span>
-          <input type="file" id="lrc-input" accept=".lrc,text/plain" hidden>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <label>计时 Time</label>
-        <div id="playback-time">00:00 / 00:00</div>
       </div>
 
       <div class="control-group">
@@ -148,6 +121,20 @@ app.innerHTML = `
           <button id="audio-toggle" class="btn">${t('pause')}</button>
           <span id="audio-status" class="audio-status">${t('playing')}</span>
         </div>
+      </div>
+
+      <div class="control-group">
+        <label>LRC</label>
+        <div class="file-pick">
+          <button class="btn btn-sm" id="lrc-pick-btn">导入 LRC</button>
+          <span class="file-pick-name" id="lrc-pick-name">未选择文件</span>
+          <input type="file" id="lrc-input" accept=".lrc,text/plain" hidden>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>计时 Time</label>
+        <div id="playback-time">00:00 / 00:00</div>
       </div>
 
       <div class="control-group">
@@ -230,6 +217,27 @@ app.innerHTML = `
     <div class="controls controls-bottom" id="custom-panel" style="display:none">
       <details class="collapsible-section" open>
         <summary class="panel-title">${t('effects_library')}</summary>
+        <div class="control-group">
+          <div class="template-actions">
+            <button class="btn btn-sm" id="tpl-save" title="${t('save_tpl')}">${t('save_tpl')}</button>
+            <button class="btn btn-sm" id="tpl-import" title="${t('import_code')}">${t('import_code')}</button>
+          </div>
+        </div>
+        <div class="control-group" id="tpl-save-input" style="display:none">
+          <div class="tpl-inline-input">
+            <input type="text" id="tpl-name-input" placeholder="${t('tpl_name_placeholder')}">
+            <button class="btn btn-sm" id="tpl-save-ok">${t('confirm')}</button>
+            <button class="btn btn-sm" id="tpl-save-cancel">${t('cancel')}</button>
+          </div>
+        </div>
+        <div class="control-group" id="share-code-group" style="display:none">
+          <label id="share-code-label">${t('share_code')}</label>
+          <input type="text" id="share-code-text" placeholder="${t('paste_code')}">
+          <div class="template-actions">
+            <button class="btn btn-sm" id="share-code-ok">${t('confirm')}</button>
+            <button class="btn btn-sm" id="share-code-cancel">${t('cancel')}</button>
+          </div>
+        </div>
         <div id="effect-grid">
         ${(() => {
           function fxKey(e: typeof effectCatalog[0]): string {
@@ -272,6 +280,7 @@ engine.init(container).then(() => {
   templateSelect.value = '0';
   syncSpeedSlider();
   syncOpacitySlider();
+  syncPostfxSliders();
 });
 
 // Mobile toggle
@@ -340,6 +349,24 @@ function syncOpacitySlider() {
   opacityVal.textContent = `${Math.round(v * 100)}%`;
 }
 
+function syncPostfxSliders() {
+  const sk = document.getElementById('shake-slider') as HTMLInputElement;
+  const sv = document.getElementById('shake-val')!;
+  const zm = document.getElementById('zoom-slider') as HTMLInputElement;
+  const zv = document.getElementById('zoom-val')!;
+  const tl = document.getElementById('tilt-slider') as HTMLInputElement;
+  const tv = document.getElementById('tilt-val')!;
+  const gl = document.getElementById('glitch-slider') as HTMLInputElement;
+  const gv = document.getElementById('glitch-val')!;
+  const hu = document.getElementById('hue-slider') as HTMLInputElement;
+  const hv = document.getElementById('hue-val')!;
+  sk.value = String(engine.shake); sv.textContent = engine.shake.toFixed(2);
+  zm.value = String(engine.zoom); zv.textContent = engine.zoom.toFixed(2);
+  tl.value = String(engine.tilt); tv.textContent = `${(engine.tilt * 17.2).toFixed(0)}°`;
+  gl.value = String(engine.glitch); gv.textContent = engine.glitch.toFixed(2);
+  hu.value = String(engine.hueShift); hv.textContent = `${engine.hueShift.toFixed(0)}°`;
+}
+
 templateSelect.addEventListener('change', () => {
   const val = templateSelect.value;
   if (val === 'custom') {
@@ -352,12 +379,14 @@ templateSelect.addEventListener('change', () => {
     const idx = parseInt(val.split('-')[1]);
     engine.loadTemplate(customTemplates[idx]);
     syncSpeedSlider();
+    syncPostfxSliders();
   } else {
     isCustomMode = false;
     customPanel.style.display = 'none';
     engine.loadTemplate(templates[parseInt(val)]);
     syncSpeedSlider();
     syncOpacitySlider();
+    syncPostfxSliders();
   }
   updateTemplateButtons();
 });
@@ -376,8 +405,6 @@ function rebuildTemplateSelect() {
 function updateTemplateButtons() {
   const val = templateSelect.value;
   const isUser = val.startsWith('user-');
-  const isCustom = val === 'custom';
-  tplSaveBtn.style.display = isCustom ? '' : 'none';
   tplDeleteBtn.style.display = isUser ? '' : 'none';
   tplExportBtn.style.display = isUser ? '' : 'none';
   // Hide inline inputs when switching
@@ -399,7 +426,7 @@ const tplDeleteOk = document.getElementById('tpl-delete-ok')!;
 const tplDeleteCancel = document.getElementById('tpl-delete-cancel')!;
 const shareCodeGroup = document.getElementById('share-code-group')!;
 const shareCodeLabel = document.getElementById('share-code-label')!;
-const shareCodeText = document.getElementById('share-code-text') as HTMLTextAreaElement;
+const shareCodeText = document.getElementById('share-code-text') as HTMLInputElement;
 const shareCodeOk = document.getElementById('share-code-ok')!;
 const shareCodeCancel = document.getElementById('share-code-cancel')!;
 
@@ -838,9 +865,11 @@ let recStartTime = 0;
 let recTimerInterval: ReturnType<typeof setInterval> | null = null;
 
 // PNG sequence capture for alpha mode
-let pngFrames: Blob[] = [];
+let pngFrameBuffer: Record<number, Blob> = {};
+let pngFrameIndex = 0;
 let pngCaptureRaf = 0;
 let pngRecording = false;
+let pngLastCaptureTime = 0;
 const PNG_FPS = 30;
 
 function formatTime(ms: number): string {
@@ -852,21 +881,37 @@ function formatTime(ms: number): string {
 
 function capturePngFrame(canvas: HTMLCanvasElement) {
   if (!pngRecording) return;
-  canvas.toBlob((blob) => {
-    if (blob && pngRecording) pngFrames.push(blob);
-  }, 'image/png');
-  setTimeout(() => capturePngFrame(canvas), 1000 / PNG_FPS);
+
+  const now = performance.now();
+  const interval = 1000 / PNG_FPS;
+
+  if (now - pngLastCaptureTime >= interval) {
+    pngLastCaptureTime = now;
+    const idx = pngFrameIndex++;
+    canvas.toBlob((blob) => {
+      if (blob) pngFrameBuffer[idx] = blob;
+    }, 'image/png');
+  }
+
+  pngCaptureRaf = requestAnimationFrame(() => capturePngFrame(canvas));
 }
 
 async function finishPngExport(slug: string) {
   recLabel.textContent = t('packing');
+
+  // Wait briefly for any pending toBlob callbacks to settle
+  await new Promise(r => setTimeout(r, 200));
+
   const JSZip = (await import('jszip')).default;
   const zip = new JSZip();
   const folder = zip.folder('frames')!;
-  for (let i = 0; i < pngFrames.length; i++) {
-    folder.file(`frame_${String(i).padStart(5, '0')}.png`, pngFrames[i]);
+  const totalFrames = pngFrameIndex;
+  for (let i = 0; i < totalFrames; i++) {
+    if (pngFrameBuffer[i]) {
+      folder.file(`frame_${String(i).padStart(5, '0')}.png`, pngFrameBuffer[i]);
+    }
   }
-  zip.file('.pv', JSON.stringify({ v: '0914', t: Date.now(), fps: PNG_FPS, f: pngFrames.length }));
+  zip.file('.pv', JSON.stringify({ v: '0914', t: Date.now(), fps: PNG_FPS, f: totalFrames }));
   const content = await zip.generateAsync({ type: 'blob' });
   const url = URL.createObjectURL(content);
   const a = document.createElement('a');
@@ -874,7 +919,8 @@ async function finishPngExport(slug: string) {
   a.download = `pv-${slug}-${PNG_FPS}fps-${Date.now()}.zip`;
   a.click();
   URL.revokeObjectURL(url);
-  pngFrames = [];
+  pngFrameBuffer = {};
+  pngFrameIndex = 0;
   recLabel.textContent = t('rec');
 }
 
@@ -886,13 +932,16 @@ recBtn.addEventListener('click', () => {
   if (useAlpha) {
     if (pngRecording) {
       pngRecording = false;
+      cancelAnimationFrame(pngCaptureRaf);
       if (recTimerInterval) { clearInterval(recTimerInterval); recTimerInterval = null; }
       recBtn.classList.remove('recording');
       finishPngExport(slug);
       return;
     }
 
-    pngFrames = [];
+    pngFrameBuffer = {};
+    pngFrameIndex = 0;
+    pngLastCaptureTime = 0;
     pngRecording = true;
     recStartTime = performance.now();
     recBtn.classList.add('recording');

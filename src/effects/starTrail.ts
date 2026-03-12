@@ -23,7 +23,6 @@ export class StarTrail extends BaseEffect {
   private tilt = -0.25;
   private arcCenter = -0.6;
   private arcSpan = 4.2;
-  private sphereRadius = 20;
   private invertColor: string = '#000000';
 
   protected setup(): void {
@@ -37,8 +36,6 @@ export class StarTrail extends BaseEffect {
     this.tilt = this.config.tilt ?? -0.25;
     this.arcCenter = this.config.arcCenter ?? -0.6;
     this.arcSpan = this.config.arcSpan ?? 4.2;
-    this.sphereRadius = this.config.sphereRadius ?? 20;
-
     this.graphics = new PIXI.Graphics();
     this.container.addChild(this.graphics);
   }
@@ -64,9 +61,7 @@ export class StarTrail extends BaseEffect {
 
     const arcStart = this.arcCenter - this.arcSpan / 2;
 
-    // 主弧线（截断到 curveFrac 处）+ 末端球体
     const curveFrac = this.config.curveFrac ?? 0.45;
-    const curveAngle = arcStart + curveFrac * this.arcSpan;
     const arcSegments = 64;
     for (let i = 0; i <= arcSegments; i++) {
       const a = arcStart + (i / arcSegments) * curveFrac * this.arcSpan;
@@ -77,39 +72,7 @@ export class StarTrail extends BaseEffect {
     }
     g.stroke({ color: this.invertColor, width: 1, alpha: 0.15 });
 
-    // 球体
-    const sphereX = ellipseCx + Math.cos(curveAngle) * this.radiusX;
-    const sphereY = ellipseCy + Math.sin(curveAngle) * this.radiusY + Math.cos(curveAngle) * this.radiusX * Math.sin(this.tilt);
-    const st = ctx.time * speed * 0.4;
-    const r = this.sphereRadius;
-    const rings = [
-      { rScale: 0.75, tiltX: 0,            tiltZ: 0 },
-      { rScale: 0.88, tiltX: Math.PI / 3,  tiltZ: Math.PI / 6 },
-      { rScale: 1.0,  tiltX: -Math.PI / 3, tiltZ: -Math.PI / 6 },
-    ];
-    for (const ring of rings) {
-      const ringR = r * ring.rScale;
-      for (let i = 0; i <= 48; i++) {
-        const a = (i / 48) * Math.PI * 2;
-        let x3 = Math.cos(a) * ringR;
-        let y3 = Math.sin(a) * ringR;
-        let z3 = 0;
-        const y3r = y3 * Math.cos(ring.tiltX) - z3 * Math.sin(ring.tiltX);
-        const z3r = y3 * Math.sin(ring.tiltX) + z3 * Math.cos(ring.tiltX);
-        y3 = y3r; z3 = z3r;
-        const x3z = x3 * Math.cos(ring.tiltZ) - y3 * Math.sin(ring.tiltZ);
-        const y3z = x3 * Math.sin(ring.tiltZ) + y3 * Math.cos(ring.tiltZ);
-        x3 = x3z; y3 = y3z;
-        const xf = x3 * Math.cos(st) + z3 * Math.sin(st);
-        const px = sphereX + xf;
-        const py = sphereY + y3;
-        if (i === 0) g.moveTo(px, py);
-        else g.lineTo(px, py);
-      }
-      g.stroke({ color: this.invertColor, width: 1.6, alpha: 0.6 });
-    }
-
-    // 绘制多条完整椭圆轨道（行星轨道感）
+    // 多条完整椭圆轨道
     const orbitCount = 4;
     const ellipseSegs = 96;
     for (let o = 0; o < orbitCount; o++) {
